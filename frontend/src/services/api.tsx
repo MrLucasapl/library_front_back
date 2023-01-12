@@ -1,11 +1,30 @@
 import axios from 'axios';
-import { Ibooks } from 'global';
+import { useLocation } from 'react-router-dom';
+import { Ibooks, IUser } from 'global';
 
 const url = 'http://localhost:4002/';
 
 const Api = axios.create({
 	baseURL: url,
 });
+
+Api.interceptors.request.use(async config => {
+	const user: IUser = JSON.parse(localStorage.getItem('user'));
+	
+	if (user) {
+		Api.defaults.headers.authorization = `Bearer ${user.token}`;
+	}
+	return config;
+});
+
+/* export const checkIfAuthenticated = async ()=>{
+	try {
+		const response = await Api.post('/checkAuthorization', {});
+		return Promise.resolve(response.data);
+	} catch (error) {
+		return Promise.reject(error);
+	}
+}; */
 
 export const postUser = async (email: string, password: string) => {
 	try {

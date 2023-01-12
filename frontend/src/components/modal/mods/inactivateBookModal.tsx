@@ -14,7 +14,7 @@ const InactivateBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 	React.useEffect(() => {
 		getBookId(bookId)
 			.then((res) => {
-				setBook(res);
+				setBook(res[0]);
 			})
 			.catch((err) => {
 				console.log(err);

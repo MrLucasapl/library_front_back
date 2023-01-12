@@ -1,13 +1,8 @@
 import Header from 'components/header';
+import { IUser } from 'global';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-
 import { PagesStyle } from './style';
-
-interface IUser {
-	name: string;
-	email: string;
-}
 
 const Layout = () => {
 	
@@ -18,7 +13,7 @@ const Layout = () => {
 		if (!user) {
 			return navigate('/');
 		}
-	}, []);
+	}, [user]);
 
 	return (
 		<PagesStyle>

@@ -29,8 +29,9 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 		getBookId(bookId)
 			.then((res: Ibooks) => {
 				const rent: IrentHistory[] = [];
-				const { rentHistory } = res;
-				rentHistory.map((history) => {
+				const { rentHistory } = res[0];
+				rentHistory.map((history: 
+					{ studentName: string; class: string; withdrawalDate: string; deliveryDate: string; }) => {
 					rent.push({
 						studentName: history.studentName,
 						class: history.class,

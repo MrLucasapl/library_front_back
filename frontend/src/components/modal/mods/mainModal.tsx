@@ -19,9 +19,9 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 	React.useEffect(() => {
 		getBookId(bookId)
 			.then((res) => {
-				setBook(res);
-				setloanBooks(res.rentHistory);
-				setIsActive(res.status.isActive);
+				setBook(res[0]);
+				setloanBooks(res[0].rentHistory);
+				setIsActive(res[0].status.isActive);
 			})
 			.catch((err) => {
 				console.log(err);

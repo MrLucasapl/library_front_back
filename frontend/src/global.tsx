@@ -1,5 +1,10 @@
 import {ButtonProps} from '@mui/material/Button';
 
+export interface IUser {
+	name: string;
+	token: string;
+}
+
 export interface IButtonsProps extends ButtonProps {
     width: string;
     height: string;

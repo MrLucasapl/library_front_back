@@ -34,7 +34,7 @@ const structureBook: Ibooks = {
 
 const AddEdit = () => {
 	const { id } = useParams();
-
+	
 	const [baseImg, setBaseImg] = React.useState<string>('');
 	const [type, setType] = React.useState('text');
 	const [value, setValue] = React.useState<string>('');
@@ -45,8 +45,8 @@ const AddEdit = () => {
 			getBookId(id)
 				.then((res) => {
 					const newRes = {
-						...res,
-						systemEntryDate: convertDate(res.systemEntryDate)
+						...res[0],
+						systemEntryDate: convertDate(res[0].systemEntryDate)
 					};
 					setBook(newRes);
 					setBaseImg(newRes.image);
