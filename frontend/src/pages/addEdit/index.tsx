@@ -6,11 +6,11 @@ import Head from 'components/head';
 import { Ibooks } from 'global';
 import { AddEditStyle, FormControlMui, InputFileStyled, TextFieldMui } from './style';
 import { getBookId, postBook, putBookId } from 'services/api';
-import { useParams } from 'react-router-dom';
-import { convertBase64 } from 'util/convertBase64';
+import { useParams, useNavigate } from 'react-router-dom';
 import { validationSchema } from './validation';
 import { useFormik } from 'formik';
 import { convertDate } from 'util/convertDate';
+import { convertBase64 } from 'util/convertBase64';
 
 const structureBook: Ibooks = {
 	'id': '',
@@ -34,6 +34,7 @@ const structureBook: Ibooks = {
 
 const AddEdit = () => {
 	const { id } = useParams();
+	const navigate = useNavigate();
 	
 	const [baseImg, setBaseImg] = React.useState<string>('');
 	const [type, setType] = React.useState('text');
@@ -43,7 +44,7 @@ const AddEdit = () => {
 	React.useEffect(() => {
 		if (id) {
 			getBookId(id)
-				.then((res) => {
+				.then((res) => {	
 					const newRes = {
 						...res[0],
 						systemEntryDate: convertDate(res[0].systemEntryDate)
@@ -68,21 +69,15 @@ const AddEdit = () => {
 		validationSchema,
 		onSubmit: () => {
 			if (id) {
-				const Newbook = book;
-				putBookId(id, Newbook)
-					.then((res) => {
-						console.log(res);					
-					})
-					.catch((err) => {
-						console.log(err);
+				putBookId(id, book)
+					.then(() => {
+						id? navigate('/home/biblioteca/'+id): navigate('/home/biblioteca/');					
 					});
+
 			}else{
 				postBook(book)
-					.then((res) => {
-						console.log(res);					
-					})
-					.catch((err) => {
-						console.log(err);
+					.then(() => {
+						id? navigate('/home/biblioteca/'+id): navigate('/home/biblioteca/');					
 					});
 			}
 		}
@@ -93,29 +88,24 @@ const AddEdit = () => {
 			return(
 				<InputFileStyled
 					id='image'
+					name='image'
 					type='file'
-					onChange={(event: React.ChangeEvent<HTMLInputElement>)=>{
-						convertBase64(event.target.files[0])
-							.then(base64 => {
-								setBook({ ...book, [event.target.id]: base64 });
-								setBaseImg(base64);
-								formik.handleChange({
-									target: {
-										name: event.target.id,
-										value: base64,
-									},
-								});
-							})
-							.catch(error => {
-								console.log(error);
-							});
+					onChange={({target}: React.ChangeEvent<HTMLInputElement>)=>{
+						convertBase64(target.files[0]).then((res)=> setBaseImg(res));
+						setBook({ ...book, [target.id]: target.files[0] });
+						formik.handleChange({
+							target: {
+								name: target.id,
+								value: target.files[0],
+							}
+						});
 					}}
 					error={formik.touched.image && Boolean(formik.errors.image)}
 				/>
 			);
 		}
 		return(
-			<img src={baseImg} onClick={handleClick}/>
+			<img src={baseImg.length >= 50? baseImg : `http://localhost:4002/upload/${baseImg}`} onClick={handleClick}/>
 		);
 	};
 	
@@ -269,7 +259,8 @@ const AddEdit = () => {
 								bordercolor='#133052'
 								backgroundcolor='#FFFFFF'
 								textcolor='#000000'
-								type='reset'
+								type='button'
+								onClick={()=> id? navigate('/home/biblioteca/'+id): navigate('/home')}
 							>
 							CANCELAR
 							</BasicButtons>						

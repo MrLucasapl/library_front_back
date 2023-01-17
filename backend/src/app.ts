@@ -1,19 +1,39 @@
 import express from 'express';
-import data from './db.json';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import JWT, { Secret } from 'jsonwebtoken';
 import path from 'path';
+import multer from 'multer';
 import * as dotenv from 'dotenv';
 import * as fs from 'fs';
 
 const door = 4002;
 const app = express();
 
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, path.join(__dirname, '../upload/'));
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${Date.now()}-${file.originalname}`);
+    }
+});
+
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/upload', express.static('upload'));
 app.use(bodyParser.json());
 app.use(cors());
 dotenv.config()
+
+const upload = multer({ storage });
+const data = JSON.parse(fs.readFileSync('./src/db.json').toString());
+
+interface ILogin {
+    id: number;
+    name: string,
+    email: string,
+    password: string
+}
 
 interface Ibooks {
     id: number;
@@ -52,32 +72,17 @@ function checkToken(
     if (validation && typeof validation === 'object') return next();
 }
 
-app.get('/books', checkToken, (req: express.Request, res: express.Response) => {
-    return res.status(200).json(data.books)
-})
-
-app.get('/books/:id', checkToken, (req: express.Request, res: express.Response) => {
-    const { id } = req.params
-    const book = data.books.filter((book)=> book.id === Number(id))
-
-    if (book[0]) {
-        return res.status(200).json(book)
-    }
-
-    return res.status(404).send({ message: 'Livro não encontrado!'});
-})
-
 app.post('/', async (req: express.Request, res: express.Response) => {
     const { email, password }:{ email: string, password: string} = req.body
     
     if (email && password) {
         const { login } = data
-        const user = login.filter((user) => {
+        const user:ILogin[] = login.filter((user:ILogin) => {
             return ((user.email.includes(email)) && (user.password.includes(password))) ? user : '';
         });
          
         if (user[0]) {
-            const token = JWT.sign({ id: user[0].id }, process.env.SECRET as Secret, {
+            const token = JWT.sign({ id: user[0].id } as {id: Number}, process.env.SECRET as Secret, {
                 expiresIn: 86400  // expira em 24 horas
             });
             return res.status(200).send({ auth: true, token: token, name: user[0].name});
@@ -89,36 +94,63 @@ app.post('/', async (req: express.Request, res: express.Response) => {
     }
 })
 
-app.post('/books', checkToken, async (req: express.Request, res: express.Response) => {
-    const book:Ibooks = req.body
-    
-    try {
+app.use(checkToken)
+
+app.get('/upload/:filename', (req: express.Request, res: express.Response) => {
+    return res.sendFile(req.params.filename)
+})
+
+app.get('/books', (req: express.Request, res: express.Response) => {
+    const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
+    return res.status(200).json(file.books)
+})
+
+app.get('/books/:id', (req: express.Request, res: express.Response) => {
+    const { id } = req.params
+    const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
+    const book = file.books.filter((book:Ibooks)=> book.id === Number(id))
+
+    if (book[0]) {
+        return res.status(200).json(book)
+    }
+
+    return res.status(404).send({ message: 'Livro não encontrado!'});
+})
+
+app.post('/books', upload.single('image'), async (req: express.Request, res: express.Response) => {
+    const book:Ibooks = JSON.parse(req.body.book)
+    const img = req.file
+    if (book && img) {
         const newBook = {
             ...book,
+            image: img.filename,
             id: data.books.length +1 
         }
+
         const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
         file.books.push(newBook)
         fs.writeFileSync(path.join(__dirname, './db.json'), JSON.stringify(file));
     
         return res.status(200).send({ message: 'Adicionado com sucesso!'});
-    } catch (error) {
-        console.log(error);
-        return res.status(411).send({ message: 'Erro, tente mais tarde!'});
     }
+    
+    return res.status(411).send({ message: 'Erro, tente mais tarde!'});
 })
 
-app.put('/books/:id', checkToken, async (req: express.Request, res: express.Response) => {
-    const bookEdit:Ibooks = req.body
-    
-   if (bookEdit) {
-       const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
-       file.books[bookEdit.id-1] = bookEdit
-       fs.writeFileSync(path.join(__dirname, './db.json'), JSON.stringify(file));
-       return res.status(200).send({ message: 'Editado com sucesso!'});
-   }
+app.put('/books/:id', upload.single('image'), async (req: express.Request, res: express.Response) => {
+    const book:Ibooks = JSON.parse(req.body.book);
+    const img = req.file
 
-    return res.status(411).send({ message: 'Erro, tente mais tarde!'});
+    const newBook = {
+        ...book,
+        image: img? img.filename : book.image
+    }
+    
+    const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
+    console.log(file.books[book.id-1] = newBook);
+    fs.writeFileSync(path.join(__dirname, './db.json'), JSON.stringify(file));
+    
+    return res.status(200).send({ message: 'Editado com sucesso!'});
 })
 
 app.listen(door, () => console.log("server rodando na porta " + door))

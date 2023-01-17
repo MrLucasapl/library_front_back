@@ -70,7 +70,7 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 			<React.Fragment>
 				<CloseModal onClick={handleClose} />
 				<div className="box-content">
-					<img src={book.image} alt="imagem do livro" />
+					<img src={`http://localhost:4002/upload/${book.image}`} alt="imagem do livro" />
 					<div className="box-info">
 						<div className="box-field">
 							<h1>{book.title}</h1>

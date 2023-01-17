@@ -16,7 +16,7 @@ const CardBook = ({ value, handleClickModal}: CardBookProps) => {
 						id={book.id}
 						onClick={() => handleClickModal(book.id)}
 					>
-						<img id={book.id} src={book.image} />
+						<img id={book.id} src={`http://localhost:4002/upload/${book.image}`} />
 						<strong id={book.id}>{book.title}</strong>
 					</div>
 				</CardBookStyled>

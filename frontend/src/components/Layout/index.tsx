@@ -19,7 +19,7 @@ const Layout = () => {
 		<PagesStyle>
 			<Header name={user?.name} />
 			<div id='layout'>
-				<Outlet />
+				{user? <Outlet /> : null}
 			</div>
 		</PagesStyle>
 	);
