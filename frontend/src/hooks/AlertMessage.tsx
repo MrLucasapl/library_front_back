@@ -10,10 +10,14 @@ interface MessageModal {
 
 export const useMessage = ()=>{
 	const [ message, setMessage ] = React.useState<MessageModal>({content: '', display: false, severity: 'success'});
+
+	message.display &&
+    setTimeout(() => {setMessage({ content: '', display: false, severity: 'success' });
+    }, 3000);
 	
 	const AlertMessage = () => {
 		return (
-			<Snackbar autoHideDuration={3000} open={message.display}>
+			<Snackbar open={message.display}>
 				<Alert style={{ width: '100%' }} severity={message.severity}>
 					{message.content}
 				</Alert>
