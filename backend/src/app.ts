@@ -72,13 +72,13 @@ function checkToken(
     if (validation && typeof validation === 'object') return next();
 }
 
-app.post('/', async (req: express.Request, res: express.Response) => {
+app.post('/', (req: express.Request, res: express.Response) => {
     const { email, password }:{ email: string, password: string} = req.body
     
     if (email && password) {
         const { login } = data
         const user:ILogin[] = login.filter((user:ILogin) => {
-            return ((user.email.includes(email)) && (user.password.includes(password))) ? user : '';
+            return ((user.email.includes(email)) && (user.password.includes(password)));
         });
          
         if (user[0]) {
@@ -90,7 +90,7 @@ app.post('/', async (req: express.Request, res: express.Response) => {
 
         return res.status(404).send({ auth: false, message: 'Acesso negado!'});
     } else {
-        return res.status(411).send({ auth: false, token: null });
+        return res.status(400).send({ auth: false, token: null });
     }
 })
 
@@ -111,7 +111,7 @@ app.get('/books/:id', (req: express.Request, res: express.Response) => {
     const book = file.books.filter((book:Ibooks)=> book.id === Number(id))
 
     if (book[0]) {
-        return res.status(200).json(book)
+        return res.status(201).json(book)
     }
 
     return res.status(404).send({ message: 'Livro não encontrado!'});
@@ -131,10 +131,10 @@ app.post('/books', upload.single('image'), async (req: express.Request, res: exp
         file.books.push(newBook)
         fs.writeFileSync(path.join(__dirname, './db.json'), JSON.stringify(file));
     
-        return res.status(200).send({ message: 'Adicionado com sucesso!'});
+        return res.status(201).send({ message: 'Adicionado com sucesso!'});
     }
     
-    return res.status(411).send({ message: 'Erro, tente mais tarde!'});
+    return res.status(400).send({ message: 'Erro, tente mais tarde!'});
 })
 
 app.put('/books/:id', upload.single('image'), async (req: express.Request, res: express.Response) => {
@@ -147,7 +147,7 @@ app.put('/books/:id', upload.single('image'), async (req: express.Request, res: 
     }
     
     const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
-    console.log(file.books[book.id-1] = newBook);
+    file.books[book.id-1] = newBook;
     fs.writeFileSync(path.join(__dirname, './db.json'), JSON.stringify(file));
     
     return res.status(200).send({ message: 'Editado com sucesso!'});
