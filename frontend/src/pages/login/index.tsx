@@ -6,34 +6,39 @@ import { BackgroundImg, BackgroundFilter, TextFieldMui } from './style';
 import { useFormik } from 'formik';
 import { initialValues, validationSchema } from './validation';
 import { postUser } from 'services/api';
-//import { AlertCustomized } from 'components/alert';
+import { useMessage } from 'hooks/AlertMessage';
 
 const Login = () => {
 	const navigate = useNavigate();
 	localStorage.removeItem('user');
-
-	//const [open, setOpen] = React.useState<boolean>(false);
-	//const [state, setState] = React.useState<boolean>(false);
+	const { setMessage, AlertMessage } = useMessage();
 
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
 		onSubmit: (values) => {
-			const response = postUser(values.email, values.password);
-			response.then((res)=>{
-				const { name, token, auth } = res;
-				if(auth){
-					localStorage.setItem('user', JSON.stringify({name, token}));
-					return navigate('/home');	
-				}
-			});
+			postUser(values.email, values.password)
+				.then((res)=>{
+					const { name, token, auth } = res;
+					if(auth){
+						localStorage.setItem('user', JSON.stringify({name, token}));
+						return navigate('/home');	
+					}
+				})
+				.catch((error)=>{
+					setMessage({
+						content: error.response.data.message,
+						display: true,
+						severity: 'error',
+					});
+				});
 		},
 	});
 
 	return (
 		<BackgroundImg>
 			<BackgroundFilter>
-				{/* {<AlertCustomized open={open} state={state} setOpen={setOpen} message={'usuario ou senha incorreto!'}/>} */}
+				{AlertMessage()}
 				<form onSubmit={formik.handleSubmit}>
 					<img id='logo' src={Logo} alt='imagem logo' />
 					<section>

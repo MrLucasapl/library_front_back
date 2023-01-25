@@ -62,7 +62,6 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 		book.status = newStatus;
 		putBookId(bookId, book);		
 		setIsActive(true);
-		handleClose();
 	};
 
 	if(typeof book === 'object'&& book !== null && 'title' in book){
