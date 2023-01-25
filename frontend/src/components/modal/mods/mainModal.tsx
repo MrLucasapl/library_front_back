@@ -7,9 +7,11 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import { useNavigate } from 'react-router-dom';
 import { checkBorrowedBook } from '../../../util/convertDate';
 import CloseModal from '../closeModal';
+import { useMessage } from 'hooks/AlertMessage';
 
 const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) => {
 
+	const { setMessage, AlertMessage } = useMessage();
 	const [book, setBook] = React.useState<Ibooks>();
 	const [isActive, setIsActive] = React.useState(true);
 	const [loanBooks, setloanBooks] = React.useState<IrentHistory[]>();
@@ -19,12 +21,16 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 	React.useEffect(() => {
 		getBookId(bookId)
 			.then((res) => {
-				setBook(res[0]);
-				setloanBooks(res[0].rentHistory);
-				setIsActive(res[0].status.isActive);
+				setBook(res);
+				setloanBooks(res.rentHistory);
+				setIsActive(res.status.isActive);
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
 			});
 	}, []);
 
@@ -47,7 +53,21 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 					loan.class == borrowed.class
 				) {
 					book.rentHistory[index] = rentHistory;
-					putBookId(bookId, book);
+					putBookId(bookId, book)
+						.then((res) => {
+							setMessage({
+								content: res.message,
+								display: true,
+								severity: 'success',
+							});
+						})
+						.catch((error) => {
+							setMessage({
+								content: (error.response?.data)? error.response.data : error.message,
+								display: true,
+								severity: 'error',
+							});
+						});
 					handleClose();
 				}
 			});
@@ -60,13 +80,28 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 			isActive: true,
 		};
 		book.status = newStatus;
-		putBookId(bookId, book);		
+		putBookId(bookId, book)
+			.then((res) => {
+				setMessage({
+					content: res.message,
+					display: true,
+					severity: 'success',
+				});					
+			})
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
+			});		
 		setIsActive(true);
 	};
 
 	if(typeof book === 'object'&& book !== null && 'title' in book){
 		return (
 			<React.Fragment>
+				{AlertMessage()}
 				<CloseModal onClick={handleClose} />
 				<div className="box-content">
 					<img src={`http://localhost:4002/upload/${book.image}`} alt="imagem do livro" />

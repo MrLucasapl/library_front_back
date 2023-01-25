@@ -7,6 +7,7 @@ import ImgFilter from 'assets/tabela-filtro.png';
 import { useOrdering } from 'hooks/ordering';
 import ComeBack from 'components/comeBack';
 import Head from 'components/head';
+import { useMessage } from 'hooks/AlertMessage';
 
 interface IRowfilter {
 	id: string;
@@ -18,6 +19,7 @@ interface IrentHistoryAll extends IrentHistory{
 }
 
 const RentHistoryBook = () => {
+	const { setMessage, AlertMessage } = useMessage();
 
 	const rentKeyOf = ['studentName', 'class', 'title', 'withdrawalDate', 'deliveryDate'];
 	
@@ -48,8 +50,12 @@ const RentHistoryBook = () => {
 					});
 				});
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
 			});
 	}, []);
 
@@ -87,6 +93,7 @@ const RentHistoryBook = () => {
 	function ProductTable() {
 		return (
 			<React.Fragment>
+				{AlertMessage()}
 				<div id="box-table">
 					<table>
 						<thead>

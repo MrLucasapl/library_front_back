@@ -6,6 +6,7 @@ import { convertDate } from '../../../util/convertDate';
 import ImgFilter from '../../../assets/tabela-filtro.png';
 import { useOrdering } from '../../../hooks/ordering';
 import CloseModal from '../closeModal';
+import { useMessage } from 'hooks/AlertMessage';
 
 interface IRowfilter {
 	id: string;
@@ -16,6 +17,7 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 
 	const rentKeyOf = ['studentName', 'class', 'withdrawalDate', 'deliveryDate'];
 	
+	const { setMessage, AlertMessage } = useMessage();
 	const [newHistory, setNewHistory] = React.useState<IrentHistory[]>([]);
 	const { requestSort, sortedItems } = useOrdering(newHistory);
 	const [isRotated, setIsRotated] = React.useState({
@@ -29,7 +31,7 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 		getBookId(bookId)
 			.then((res: Ibooks) => {
 				const rent: IrentHistory[] = [];
-				const { rentHistory } = res[0];
+				const { rentHistory } = res;
 				rentHistory.map((history: 
 					{ studentName: string; class: string; withdrawalDate: string; deliveryDate: string; }) => {
 					rent.push({
@@ -41,8 +43,12 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 				});
 				setNewHistory(rent);
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
 			});
 	}, []);
 
@@ -80,6 +86,7 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 	function ProductTable() {
 		return (
 			<React.Fragment>
+				{AlertMessage()}
 				<CloseModal onClick={()=>handleChangeModal('rentHistory','main')} />
 				<div className='box-title'>
 					<h1>Histórico de empréstimos do livro</h1>

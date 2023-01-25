@@ -11,6 +11,7 @@ import { InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import { filterBooks } from 'util/filterBooks';
 import Modal from 'components/modal';
 import { useParams } from 'react-router-dom';
+import { useMessage } from 'hooks/AlertMessage';
 
 type TInputField = {
 	name: string;
@@ -30,6 +31,7 @@ const inputField: TInputField[]  = [
 
 const Library = () => {
 	const {id} = useParams();
+	const { setMessage, AlertMessage } = useMessage();
 
 	const { showModal, handleClickModal} = Modal();
 
@@ -47,8 +49,12 @@ const Library = () => {
 				setBooks(res);
 				setCopyBooks(res);
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
 			});
 	}, []);
 
@@ -69,6 +75,7 @@ const Library = () => {
 
 	return (
 		<LibraryStyles>
+			{AlertMessage()}
 			<Head
 				title="Biblioteca"
 				content="private"

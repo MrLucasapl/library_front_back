@@ -7,20 +7,26 @@ import { TextFieldMui, StyleLend } from '../style';
 import { initialValuesLend, validationSchemaLend } from '../validation';
 import { useFormik } from 'formik';
 import CloseModal from '../closeModal';
+import { useMessage } from 'hooks/AlertMessage';
 
 const LendBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 
 	const [book, setBook] = React.useState<Ibooks>();
 	const [deliveryDate, setDeliveryDate] = React.useState('text');
 	const [withdrawalDate, setWithdrawalDate] = React.useState('text');
+	const { setMessage, AlertMessage } = useMessage();
 
 	React.useEffect(() => {
 		getBookId(bookId)
 			.then((res) => {
-				setBook(res[0]);
+				setBook(res);
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
 			});
 	}, []);
 
@@ -36,7 +42,21 @@ const LendBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 					deliveryDate: values.DeliveryDate,
 				};
 				book.rentHistory.push(rentHistory);
-				putBookId(book.id, book);
+				putBookId(book.id, book)
+					.then((res) => {
+						setMessage({
+							content: (res.response?.data)? res.response.data : res.message,
+							display: true,
+							severity: 'error',
+						});						
+					})
+					.catch((error) => {
+						setMessage({
+							content: (error.response?.data)? error.response.data : error.message,
+							display: true,
+							severity: 'error',
+						});
+					});
 				handleChangeModal('lent','main');
 			}	
 		},
@@ -45,6 +65,7 @@ const LendBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 	if (book) {
 		return (
 			<StyleLend>
+				{AlertMessage()}
 				<CloseModal onClick={()=>handleChangeModal('lent','main')} />
 				<div className="box-content">
 					<div className='box-text'>

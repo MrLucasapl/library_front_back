@@ -77,15 +77,15 @@ app.post('/', (req: express.Request, res: express.Response) => {
     
     if (email && password) {
         const { login } = data
-        const user:ILogin[] = login.filter((user:ILogin) => {
+        const user:ILogin = login.find((user:ILogin) => {
             return ((user.email.includes(email)) && (user.password.includes(password)));
         });
          
-        if (user[0]) {
-            const token = JWT.sign({ id: user[0].id } as {id: Number}, process.env.SECRET as Secret, {
+        if (user) {
+            const token = JWT.sign({ id: user.id } as {id: Number}, process.env.SECRET as Secret, {
                 expiresIn: 86400  // expira em 24 horas
             });
-            return res.status(200).send({ auth: true, token: token, name: user[0].name});
+            return res.status(200).send({ auth: true, token: token, name: user.name});
         }
 
         return res.status(404).send({ auth: false, message: 'Acesso negado!'});
@@ -108,9 +108,9 @@ app.get('/books', (req: express.Request, res: express.Response) => {
 app.get('/books/:id', (req: express.Request, res: express.Response) => {
     const { id } = req.params
     const file = JSON.parse(fs.readFileSync('./src/db.json').toString());
-    const book = file.books.filter((book:Ibooks)=> book.id === Number(id))
-
-    if (book[0]) {
+    const book = file.books.find((book:Ibooks)=> book.id === Number(id))
+    
+    if (book) {
         return res.status(201).json(book)
     }
 

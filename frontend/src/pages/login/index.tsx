@@ -27,7 +27,7 @@ const Login = () => {
 				})
 				.catch((error)=>{
 					setMessage({
-						content: error.response.data.message,
+						content: (error.response?.data)? error.response.data : error.message,
 						display: true,
 						severity: 'error',
 					});

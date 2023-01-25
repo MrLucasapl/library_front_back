@@ -1,4 +1,5 @@
 import { useFormik } from 'formik';
+import { useMessage } from 'hooks/AlertMessage';
 import React from 'react';
 import { Ibooks, MainModalProps } from '../../../global';
 import { getBookId, putBookId } from '../../../services/api';
@@ -10,14 +11,19 @@ import { initialValuesInactivate, validationSchemaInactivate } from '../validati
 const InactivateBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 
 	const [book, setBook] = React.useState<Ibooks>();
+	const { setMessage, AlertMessage } = useMessage();
 
 	React.useEffect(() => {
 		getBookId(bookId)
 			.then((res) => {
-				setBook(res[0]);
+				setBook(res);
 			})
-			.catch((err) => {
-				console.log(err);
+			.catch((error) => {
+				setMessage({
+					content: (error.response?.data)? error.response.data : error.message,
+					display: true,
+					severity: 'error',
+				});
 			});
 	}, []);
 
@@ -31,7 +37,21 @@ const InactivateBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 					isActive: false,
 				};
 				book.status = newStatus;
-				putBookId(bookId, book);
+				putBookId(bookId, book)
+					.then((res) => {
+						setMessage({
+							content: (res.response?.data)? res.response.data : res.message,
+							display: true,
+							severity: 'error',
+						});						
+					})
+					.catch((error) => {
+						setMessage({
+							content: (error.response?.data)? error.response.data : error.message,
+							display: true,
+							severity: 'error',
+						});
+					});
 				handleChangeModal('inactive','main');
 			}	
 		},
@@ -40,6 +60,7 @@ const InactivateBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 	if (book) {
 		return (
 			<StyleInactivate>
+				{AlertMessage()}
 				<CloseModal onClick={()=>handleChangeModal('inactive','main')} />
 				<div>
 					<h1>Inativar Livro</h1>

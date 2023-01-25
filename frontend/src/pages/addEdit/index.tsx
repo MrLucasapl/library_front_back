@@ -11,6 +11,7 @@ import { validationSchema } from './validation';
 import { useFormik } from 'formik';
 import { convertDate } from 'util/convertDate';
 import { convertBase64 } from 'util/convertBase64';
+import { useMessage } from 'hooks/AlertMessage';
 
 const structureBook: Ibooks = {
 	'id': '',
@@ -35,6 +36,7 @@ const structureBook: Ibooks = {
 const AddEdit = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
+	const { setMessage, AlertMessage } = useMessage();
 	
 	const [baseImg, setBaseImg] = React.useState<string>('');
 	const [type, setType] = React.useState('text');
@@ -44,16 +46,22 @@ const AddEdit = () => {
 	React.useEffect(() => {
 		if (id) {
 			getBookId(id)
-				.then((res) => {	
-					const newRes = {
-						...res[0],
-						systemEntryDate: convertDate(res[0].systemEntryDate)
-					};
-					setBook(newRes);
-					setBaseImg(newRes.image);
+				.then((res) => {
+					if(res){
+						const newRes = {
+							...res,
+							systemEntryDate: convertDate(res.systemEntryDate)
+						};
+						setBook(newRes);
+						setBaseImg(newRes.image);
+					}
 				})
-				.catch((err) => {
-					console.log(err);
+				.catch((error) => {
+					setMessage({
+						content: (error.response?.data)? error.response.data : error.message,
+						display: true,
+						severity: 'error',
+					});
 				});
 		}
 		setBook(structureBook);
@@ -70,14 +78,38 @@ const AddEdit = () => {
 		onSubmit: () => {
 			if (id) {
 				putBookId(id, book)
-					.then(() => {
+					.then((res) => {
+						setMessage({
+							content: res.message,
+							display: true,
+							severity: 'success',
+						});
 						id? navigate('/home/biblioteca/'+id): navigate('/home/biblioteca/');					
+					})
+					.catch((error) => {
+						setMessage({
+							content: (error.response?.data)? error.response.data : error.message,
+							display: true,
+							severity: 'error',
+						});
 					});
 
 			}else{
 				postBook(book)
-					.then(() => {
+					.then((res) => {
+						setMessage({
+							content: res.data.message,
+							display: true,
+							severity: 'success',
+						});
 						id? navigate('/home/biblioteca/'+id): navigate('/home/biblioteca/');					
+					})
+					.catch((error) => {
+						setMessage({
+							content: (error.response?.data)? error.response.data : error.message,
+							display: true,
+							severity: 'error',
+						});
 					});
 			}
 		}
@@ -112,6 +144,7 @@ const AddEdit = () => {
 	if (book) {
 		return (
 			<AddEditStyle>
+				{AlertMessage()}
 				<Head
 					title='Add Books'
 					content='private'
