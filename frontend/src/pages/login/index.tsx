@@ -36,7 +36,7 @@ const Login = () => {
 	});
 
 	return (
-		<BackgroundImg>
+		<BackgroundImg data-testid='login'>
 			<BackgroundFilter>
 				{AlertMessage()}
 				<form onSubmit={formik.handleSubmit}>
