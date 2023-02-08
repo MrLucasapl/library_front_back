@@ -10,7 +10,6 @@ import CloseModal from '../closeModal';
 import { useMessage } from 'hooks/AlertMessage';
 
 const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) => {
-
 	const { setMessage, AlertMessage } = useMessage();
 	const [book, setBook] = React.useState<Ibooks>();
 	const [isActive, setIsActive] = React.useState(true);
@@ -20,16 +19,16 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 
 	React.useEffect(() => {
 		getBookId(bookId)
-			.then((res) => {
+			.then(res => {
 				setBook(res);
 				setloanBooks(res.rentHistory);
 				setIsActive(res.status.isActive);
 			})
-			.catch((error) => {
+			.catch(error => {
 				setMessage({
-					content: (error.response?.data)? error.response.data : error.message,
+					content: error.response?.data ? error.response.data : error.message,
 					display: true,
-					severity: 'error',
+					severity: 'error'
 				});
 			});
 	}, []);
@@ -41,31 +40,28 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 		}
 	}, [book]);
 
-	const ReturnBook = ()=>{		
-		if(borrowed){
+	const ReturnBook = () => {
+		if (borrowed) {
 			const rentHistory = {
 				...borrowed,
-				deliveryDate: new Date().toISOString().split('T')[0],
+				deliveryDate: new Date().toISOString().split('T')[0]
 			};
 			loanBooks.filter((loan, index) => {
-				if (
-					loan.studentName == borrowed.studentName &&
-					loan.class == borrowed.class
-				) {
+				if (loan.studentName == borrowed.studentName && loan.class == borrowed.class) {
 					book.rentHistory[index] = rentHistory;
 					putBookId(bookId, book)
-						.then((res) => {
+						.then(res => {
 							setMessage({
 								content: res.message,
 								display: true,
-								severity: 'success',
+								severity: 'success'
 							});
 						})
-						.catch((error) => {
+						.catch(error => {
 							setMessage({
-								content: (error.response?.data)? error.response.data : error.message,
+								content: error.response?.data ? error.response.data : error.message,
 								display: true,
-								severity: 'error',
+								severity: 'error'
 							});
 						});
 					handleClose();
@@ -74,31 +70,31 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 		}
 	};
 
-	const ActivateBook = ()=>{
+	const ActivateBook = () => {
 		const newStatus = {
 			description: '',
-			isActive: true,
+			isActive: true
 		};
 		book.status = newStatus;
 		putBookId(bookId, book)
-			.then((res) => {
+			.then(res => {
 				setMessage({
 					content: res.message,
 					display: true,
-					severity: 'success',
-				});					
-			})
-			.catch((error) => {
-				setMessage({
-					content: (error.response?.data)? error.response.data : error.message,
-					display: true,
-					severity: 'error',
+					severity: 'success'
 				});
-			});		
+			})
+			.catch(error => {
+				setMessage({
+					content: error.response?.data ? error.response.data : error.message,
+					display: true,
+					severity: 'error'
+				});
+			});
 		setIsActive(true);
 	};
 
-	if(typeof book === 'object'&& book !== null && 'title' in book){
+	if (typeof book === 'object' && book !== null && 'title' in book) {
 		return (
 			<React.Fragment>
 				{AlertMessage()}
@@ -129,16 +125,16 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 				</div>
 				<div className="box-button">
 					<BasicButtons
-						className={borrowed? '.active' : ''}
+						className={borrowed ? '.active' : ''}
 						disabled={!isActive}
-						width='272px'
-						height='53px'
-						bordercolor='#ADB5BD'
-						backgroundcolor='#FFC501'
-						type='button'
-						fontSize='0.9rem'
-						textcolor= '#000000'
-						onClick={()=> {
+						width="272px"
+						height="53px"
+						bordercolor="#ADB5BD"
+						backgroundcolor="#FFC501"
+						type="button"
+						fontSize="0.9rem"
+						textcolor="#000000"
+						onClick={() => {
 							if (borrowed) {
 								return ReturnBook();
 							} else {
@@ -146,89 +142,92 @@ const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) =
 							}
 						}}
 					>
-						<AutoStoriesIcon sx={{ fontSize: '2.3rem', padding: '0px 8px'}}/>  {borrowed? 'Devolver' : 'Emprestar'}
+						<AutoStoriesIcon sx={{ fontSize: '2.3rem', padding: '0px 8px' }} /> {borrowed ? 'Devolver' : 'Emprestar'}
 					</BasicButtons>
 
 					<div className="box-alternative">
 						<BasicButtons
-							width='101px'
-							height='53px'
-							bordercolor='#167CE2'
-							backgroundcolor='#FFFFFF'
-							type='button'
-							fontSize='0.9rem'
-							textcolor= '#167CE2'
+							width="101px"
+							height="53px"
+							bordercolor="#167CE2"
+							backgroundcolor="#FFFFFF"
+							type="button"
+							fontSize="0.9rem"
+							textcolor="#167CE2"
 							onClick={() => navigate(`/home/addbook/${bookId}`)}
 						>
-						Editar
+							Editar
 						</BasicButtons>
 
 						<BasicButtons
-							width='101px'
-							height='53px'
-							bordercolor= {isActive? '#ED5E5E' : '#49D749'}
-							backgroundcolor='#FFFFFF'
-							type='button'
-							fontSize='0.9rem'
-							textcolor= {isActive? '#ED5E5E' : '#49D749'}
-							onClick={() =>{
+							width="101px"
+							height="53px"
+							bordercolor={isActive ? '#ED5E5E' : '#49D749'}
+							backgroundcolor="#FFFFFF"
+							type="button"
+							fontSize="0.9rem"
+							textcolor={isActive ? '#ED5E5E' : '#49D749'}
+							onClick={() => {
 								if (!isActive) {
 									return ActivateBook();
 								} else {
 									return handleChangeModal('main', 'inactive');
 								}
-							}
-							}
+							}}
 						>
-							{isActive? 'Inativar' : 'Ativar'}
+							{isActive ? 'Inativar' : 'Ativar'}
 						</BasicButtons>
 
 						<BasicButtons
-							width='101px'
-							height='53px'
-							bordercolor='#ADB5BD'
-							backgroundcolor='#FFFFFF'
-							type='button'
-							fontSize='0.9rem'
-							textcolor= '#000000'
+							width="101px"
+							height="53px"
+							bordercolor="#ADB5BD"
+							backgroundcolor="#FFFFFF"
+							type="button"
+							fontSize="0.9rem"
+							textcolor="#000000"
 							onClick={() => handleChangeModal('main', 'rentHistory')}
 						>
-						Histórico
+							Histórico
 						</BasicButtons>
 					</div>
 				</div>
 
-				{ borrowed && <div className='box-LoanBook'>
-					<h1>Dados do aluno</h1>
-					<div className="box-fild-loan">
-						<div className="fild">
-							<strong>Nome do aluno</strong>
-							<p>{borrowed.studentName}</p>
-						</div>
-						<div className="fild">
-							<strong>Turma</strong>
-							<p>{borrowed.class}</p>
-						</div>
-						<div className="fild">
-							<strong>Data da retirada</strong>
-							<p>{convertDate(borrowed.withdrawalDate)}</p>
-						</div>
-						<div className="fild">
-							<strong>Data da entrega</strong>
-							<p>{convertDate(borrowed.deliveryDate)}</p>
+				{borrowed && (
+					<div className="box-LoanBook">
+						<h1>Dados do aluno</h1>
+						<div className="box-fild-loan">
+							<div className="fild">
+								<strong>Nome do aluno</strong>
+								<p>{borrowed.studentName}</p>
+							</div>
+							<div className="fild">
+								<strong>Turma</strong>
+								<p>{borrowed.class}</p>
+							</div>
+							<div className="fild">
+								<strong>Data da retirada</strong>
+								<p>{convertDate(borrowed.withdrawalDate)}</p>
+							</div>
+							<div className="fild">
+								<strong>Data da entrega</strong>
+								<p>{convertDate(borrowed.deliveryDate)}</p>
+							</div>
 						</div>
 					</div>
-				</div>}
+				)}
 
-				{ isActive == false && <div className='box-LoanBook'>
-					<h1>Informações da inativação</h1>
-					<div className="box-fild-loan">
-						<div className="fild-inactivad">
-							<strong>Motivo</strong>
-							<p>{book.status.description}</p>
+				{isActive == false && (
+					<div className="box-LoanBook">
+						<h1>Informações da inativação</h1>
+						<div className="box-fild-loan">
+							<div className="fild-inactivad">
+								<strong>Motivo</strong>
+								<p>{book.status.description}</p>
+							</div>
 						</div>
 					</div>
-				</div>}
+				)}
 			</React.Fragment>
 		);
 	}

@@ -11,15 +11,18 @@ const Dors = () => {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path='/' element={<Login />} />
-				<Route path='/home' element={<Layout />}>
+				<Route path="/" element={<Login />} />
+				<Route path="/home" element={<Layout />}>
 					<Route path="/home" element={<Home />} />
-					<Route path="/home/addbook/*" element={
-						<Routes>
-							<Route path=":id" element={<AddEdit />} />
-							<Route path="/" element={<AddEdit />} />
-						</Routes>
-					} />
+					<Route
+						path="/home/addbook/*"
+						element={
+							<Routes>
+								<Route path=":id" element={<AddEdit />} />
+								<Route path="/" element={<AddEdit />} />
+							</Routes>
+						}
+					/>
 					<Route path="/home/biblioteca/:id?" element={<Library />} />
 					<Route path="/home/historico" element={<RentHistoryBook />} />
 				</Route>

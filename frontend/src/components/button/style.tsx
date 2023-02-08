@@ -16,25 +16,26 @@ export const StyledButton = muistyled(Button)((format: IButtonsProps) => ({
 	borderColor: `${format.bordercolor}`,
 	backgroundColor: `${format.backgroundcolor}`,
 
-	...(format.className && !format.disabled && {
-		borderColor: '#ADB5BD',
-		backgroundColor: '#F4F4F4',
-	}),
+	...(format.className &&
+		!format.disabled && {
+			borderColor: '#ADB5BD',
+			backgroundColor: '#F4F4F4'
+		}),
 
-	...(format.disabled && !format.className && {
-		borderColor: '#ADB5BD',
-		backgroundColor: '#ffc4018b',
-	}),
+	...(format.disabled &&
+		!format.className && {
+			borderColor: '#ADB5BD',
+			backgroundColor: '#ffc4018b'
+		}),
 
 	'&:hover': {
 		backgroundColor: `${format.backgroundcolor}`,
 		borderColor: `${format.bordercolor}`,
-		boxShadow: 'none',
+		boxShadow: 'none'
 	},
 
-	'span': {
+	span: {
 		width: '100%',
-		height: `${format.height}`,
+		height: `${format.height}`
 	}
-
 }));

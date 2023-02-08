@@ -10,20 +10,20 @@ export const validationSchemaLend = object().shape({
 	StudentName: string().required(),
 	Class: string().required(),
 	DeliveryDate: date().min(validationData(new Date())).required(),
-	WithdrawalDate: date().min(validationData(new Date())).required(),
+	WithdrawalDate: date().min(validationData(new Date())).required()
 });
 
 export const initialValuesLend = {
 	StudentName: '',
 	Class: '',
 	DeliveryDate: '',
-	WithdrawalDate: '',
+	WithdrawalDate: ''
 };
 
 export const validationSchemaInactivate = object().shape({
-	Description: string().required(),
+	Description: string().required()
 });
 
 export const initialValuesInactivate = {
-	Description: '',
+	Description: ''
 };

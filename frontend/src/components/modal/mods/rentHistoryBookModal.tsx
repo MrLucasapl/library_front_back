@@ -14,9 +14,8 @@ interface IRowfilter {
 }
 
 const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
-
 	const rentKeyOf = ['studentName', 'class', 'withdrawalDate', 'deliveryDate'];
-	
+
 	const { setMessage, AlertMessage } = useMessage();
 	const [newHistory, setNewHistory] = React.useState<IrentHistory[]>([]);
 	const { requestSort, sortedItems } = useOrdering(newHistory);
@@ -32,22 +31,23 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 			.then((res: Ibooks) => {
 				const rent: IrentHistory[] = [];
 				const { rentHistory } = res;
-				rentHistory.map((history: 
-					{ studentName: string; class: string; withdrawalDate: string; deliveryDate: string; }) => {
-					rent.push({
-						studentName: history.studentName,
-						class: history.class,
-						withdrawalDate: history.withdrawalDate,
-						deliveryDate: history.deliveryDate
-					});
-				});
+				rentHistory.map(
+					(history: { studentName: string; class: string; withdrawalDate: string; deliveryDate: string }) => {
+						rent.push({
+							studentName: history.studentName,
+							class: history.class,
+							withdrawalDate: history.withdrawalDate,
+							deliveryDate: history.deliveryDate
+						});
+					}
+				);
 				setNewHistory(rent);
 			})
-			.catch((error) => {
+			.catch(error => {
 				setMessage({
-					content: (error.response?.data)? error.response.data : error.message,
+					content: error.response?.data ? error.response.data : error.message,
 					display: true,
-					severity: 'error',
+					severity: 'error'
 				});
 			});
 	}, []);
@@ -55,8 +55,8 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 	const handleClickImg = (id: string) => {
 		const parseId = id as 'studentName' | 'class' | 'withdrawalDate' | 'deliveryDate';
 		requestSort(parseId);
-		
-		setIsRotated((isRotated) => ({
+
+		setIsRotated(isRotated => ({
 			...isRotated,
 			[id]: !isRotated[id],
 			studentName: id === 'studentName' ? !isRotated[id] : false,
@@ -71,13 +71,7 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 		return (
 			<td id={id}>
 				<div className="filter-td">
-					<img
-						id={id}
-						src={ImgFilter}
-						onClick={onClick}
-						alt="imagem do filtro"
-						style={{ transform: rotation }}
-					/>
+					<img id={id} src={ImgFilter} onClick={onClick} alt="imagem do filtro" style={{ transform: rotation }} />
 				</div>
 			</td>
 		);
@@ -87,8 +81,8 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 		return (
 			<React.Fragment>
 				{AlertMessage()}
-				<CloseModal onClick={()=>handleChangeModal('rentHistory','main')} />
-				<div className='box-title'>
+				<CloseModal onClick={() => handleChangeModal('rentHistory', 'main')} />
+				<div className="box-title">
 					<h1>Histórico de empréstimos do livro</h1>
 				</div>
 				<div id="box-table">
@@ -104,8 +98,8 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 						<tbody>
 							{
 								<tr>
-									{rentKeyOf.map((id) => (
-										<RowFilter key={id} id={id} onClick={()=>handleClickImg(id)} />
+									{rentKeyOf.map(id => (
+										<RowFilter key={id} id={id} onClick={() => handleClickImg(id)} />
 									))}
 								</tr>
 							}
@@ -126,7 +120,7 @@ const RentHistoryBookModal = ({ bookId, handleChangeModal }: MainModalProps) => 
 
 	return (
 		<StyleRentHistory>
-			<ProductTable/>		
+			<ProductTable />
 		</StyleRentHistory>
 	);
 };

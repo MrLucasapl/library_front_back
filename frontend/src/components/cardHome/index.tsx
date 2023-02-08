@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { CardsStyle } from './style';
 
 interface CardHomeProps {
-value: string;
-img: string;
-alt: string;
-to: string;
+	value: string;
+	img: string;
+	alt: string;
+	to: string;
 }
 
 const CardHome = ({ value, img, alt, to }: CardHomeProps) => {

@@ -7,15 +7,12 @@ interface CardBookProps {
 	handleClickModal: (id: string) => void;
 }
 
-const CardBook = ({ value, handleClickModal}: CardBookProps) => {
+const CardBook = ({ value, handleClickModal }: CardBookProps) => {
 	if (value) {
-		const book = value?.map((book) => {
+		const book = value?.map(book => {
 			return (
 				<CardBookStyled key={book.id}>
-					<div
-						id={book.id}
-						onClick={() => handleClickModal(book.id)}
-					>
+					<div id={book.id} onClick={() => handleClickModal(book.id)}>
 						<img id={book.id} src={`http://localhost:4002/upload/${book.image}`} />
 						<strong id={book.id}>{book.title}</strong>
 					</div>

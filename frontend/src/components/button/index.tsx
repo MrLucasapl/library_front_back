@@ -15,11 +15,10 @@ const BasicButtons = (format: IButtonsProps) => {
 			variant={format.variant}
 			onClick={format.onClick}
 			disabled={format.disabled}
-			sx={{color: format.textcolor}}
+			sx={{ color: format.textcolor }}
 		>
 			{format.children}
-		</StyledButton> 
-		
+		</StyledButton>
 	);
 };
 

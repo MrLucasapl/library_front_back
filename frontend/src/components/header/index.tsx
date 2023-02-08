@@ -5,7 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { HeaderStyle } from './style';
 import { Link } from 'react-router-dom';
 
-const Header = ({ name }:{name: string}) => {
+const Header = ({ name }: { name: string }) => {
 	const [isActive, setIsActive] = React.useState<boolean>(false);
 
 	function showMenu(): void {
@@ -17,13 +17,13 @@ const Header = ({ name }:{name: string}) => {
 	}
 
 	return (
-		<HeaderStyle display={isActive? 'flex' : 'none'}>
+		<HeaderStyle display={isActive ? 'flex' : 'none'}>
 			<img src={Logo} alt="imagem do logo" />
 			<nav onClick={showMenu}>
 				<div id="menu">
-					<PersonIcon sx={{ color: '#FFC501' }}/>
+					<PersonIcon sx={{ color: '#FFC501' }} />
 					<p>{name}</p>
-					<ExpandMoreIcon/>
+					<ExpandMoreIcon />
 				</div>
 				<ul id="options-menu">
 					<li>

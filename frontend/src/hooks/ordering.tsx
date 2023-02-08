@@ -12,7 +12,7 @@ interface ISortCriteria {
 }
 
 export const useOrdering = (value: IrentHistory[]): IUseOrdering => {
-	const [sortConfig, setSortConfig] = React.useState<ISortCriteria>({ key:'class', direction: 'descending' });
+	const [sortConfig, setSortConfig] = React.useState<ISortCriteria>({ key: 'class', direction: 'descending' });
 
 	const sortedItems = React.useMemo(() => {
 		const sortedProducts = [...value];
@@ -20,8 +20,8 @@ export const useOrdering = (value: IrentHistory[]): IUseOrdering => {
 		if (sortConfig) {
 			sortedProducts.sort((a, b) => {
 				const aValue = a[sortConfig.key];
-				const bValue = b[sortConfig.key];			
-				
+				const bValue = b[sortConfig.key];
+
 				if (aValue > bValue) {
 					return sortConfig.direction === 'descending' ? -1 : 1;
 				}
@@ -32,21 +32,21 @@ export const useOrdering = (value: IrentHistory[]): IUseOrdering => {
 		}
 		return sortedProducts;
 	}, [value, sortConfig]);
-	
+
 	const requestSort = (key: keyof IrentHistory) => {
 		let direction: 'ascending' | 'descending' = 'ascending';
 		if (sortConfig) {
 			if (sortConfig.key === key) {
-				direction = sortConfig.direction == 'descending'? 'ascending' : 'descending';
-			}else{
-				direction = sortConfig.direction == 'ascending'? 'descending' : 'ascending';
+				direction = sortConfig.direction == 'descending' ? 'ascending' : 'descending';
+			} else {
+				direction = sortConfig.direction == 'ascending' ? 'descending' : 'ascending';
 			}
 		}
 		setSortConfig({ key, direction });
 	};
-	
+
 	return {
 		requestSort,
-		sortedItems,
+		sortedItems
 	};
 };

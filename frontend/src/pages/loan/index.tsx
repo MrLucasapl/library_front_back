@@ -14,15 +14,15 @@ interface IRowfilter {
 	onClick: () => void;
 }
 
-interface IrentHistoryAll extends IrentHistory{
-    title: string
+interface IrentHistoryAll extends IrentHistory {
+	title: string;
 }
 
 const RentHistoryBook = () => {
 	const { setMessage, AlertMessage } = useMessage();
 
 	const rentKeyOf = ['studentName', 'class', 'title', 'withdrawalDate', 'deliveryDate'];
-	
+
 	const [Books, setBooks] = React.useState<IrentHistoryAll[]>([]);
 	const { requestSort, sortedItems } = useOrdering(Books);
 	const [isRotated, setIsRotated] = React.useState({
@@ -37,7 +37,7 @@ const RentHistoryBook = () => {
 			.then((res: Ibooks[]) => {
 				const rent: IrentHistoryAll[] = [];
 				res.map(({ title, rentHistory }) => {
-					rentHistory.map((history) => {
+					rentHistory.map(history => {
 						rent.push({
 							studentName: history.studentName,
 							class: history.class,
@@ -50,11 +50,11 @@ const RentHistoryBook = () => {
 					});
 				});
 			})
-			.catch((error) => {
+			.catch(error => {
 				setMessage({
-					content: (error.response?.data)? error.response.data : error.message,
+					content: error.response?.data ? error.response.data : error.message,
 					display: true,
-					severity: 'error',
+					severity: 'error'
 				});
 			});
 	}, []);
@@ -62,8 +62,8 @@ const RentHistoryBook = () => {
 	const handleClickImg = (id: string) => {
 		const parseId = id as 'studentName' | 'class' | 'withdrawalDate' | 'deliveryDate';
 		requestSort(parseId);
-		
-		setIsRotated((isRotated) => ({
+
+		setIsRotated(isRotated => ({
 			...isRotated,
 			[id]: !isRotated[id],
 			studentName: id === 'studentName' ? !isRotated[id] : false,
@@ -78,13 +78,7 @@ const RentHistoryBook = () => {
 		return (
 			<td id={id}>
 				<div className="filter-td">
-					<img
-						id={id}
-						src={ImgFilter}
-						onClick={onClick}
-						alt="imagem do filtro"
-						style={{ transform: rotation }}
-					/>
+					<img id={id} src={ImgFilter} onClick={onClick} alt="imagem do filtro" style={{ transform: rotation }} />
 				</div>
 			</td>
 		);
@@ -108,8 +102,8 @@ const RentHistoryBook = () => {
 						<tbody>
 							{
 								<tr>
-									{rentKeyOf.map((id) => (
-										<RowFilter key={id} id={id} onClick={()=>handleClickImg(id)} />
+									{rentKeyOf.map(id => (
+										<RowFilter key={id} id={id} onClick={() => handleClickImg(id)} />
 									))}
 								</tr>
 							}
@@ -131,16 +125,9 @@ const RentHistoryBook = () => {
 
 	return (
 		<StyleRentHistory>
-			<Head
-				title="Historico"
-				content="private"
-				description="A página mostra todos os empréstimos dos livros."
-			/>
-			<ComeBack
-				to="/home"
-				value="Cadastrar novo livro"
-			/>
-			<ProductTable/>		
+			<Head title="Historico" content="private" description="A página mostra todos os empréstimos dos livros." />
+			<ComeBack to="/home" value="Cadastrar novo livro" />
+			<ProductTable />
 		</StyleRentHistory>
 	);
 };

@@ -9,20 +9,19 @@ import { InputDescription, StyleInactivate } from '../style';
 import { initialValuesInactivate, validationSchemaInactivate } from '../validation';
 
 const InactivateBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
-
 	const [book, setBook] = React.useState<Ibooks>();
 	const { setMessage, AlertMessage } = useMessage();
 
 	React.useEffect(() => {
 		getBookId(bookId)
-			.then((res) => {
+			.then(res => {
 				setBook(res);
 			})
-			.catch((error) => {
+			.catch(error => {
 				setMessage({
-					content: (error.response?.data)? error.response.data : error.message,
+					content: error.response?.data ? error.response.data : error.message,
 					display: true,
-					severity: 'error',
+					severity: 'error'
 				});
 			});
 	}, []);
@@ -30,64 +29,64 @@ const InactivateBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 	const formik = useFormik({
 		initialValues: initialValuesInactivate,
 		validationSchema: validationSchemaInactivate,
-		onSubmit: (values) => {
-			if(book){
+		onSubmit: values => {
+			if (book) {
 				const newStatus = {
 					description: values.Description,
-					isActive: false,
+					isActive: false
 				};
 				book.status = newStatus;
 				putBookId(bookId, book)
-					.then((res) => {
+					.then(res => {
 						setMessage({
-							content: (res.response?.data)? res.response.data : res.message,
+							content: res.response?.data ? res.response.data : res.message,
 							display: true,
-							severity: 'error',
-						});						
+							severity: 'error'
+						});
 					})
-					.catch((error) => {
+					.catch(error => {
 						setMessage({
-							content: (error.response?.data)? error.response.data : error.message,
+							content: error.response?.data ? error.response.data : error.message,
 							display: true,
-							severity: 'error',
+							severity: 'error'
 						});
 					});
-				handleChangeModal('inactive','main');
-			}	
-		},
+				handleChangeModal('inactive', 'main');
+			}
+		}
 	});
-    
+
 	if (book) {
 		return (
 			<StyleInactivate>
 				{AlertMessage()}
-				<CloseModal onClick={()=>handleChangeModal('inactive','main')} />
+				<CloseModal onClick={() => handleChangeModal('inactive', 'main')} />
 				<div>
 					<h1>Inativar Livro</h1>
 				</div>
 				<form onSubmit={formik.handleSubmit}>
 					<InputDescription
-						type='text'
-						label='Descrição'
-						id='Description'
-						variant='outlined'
-						autoComplete='off'
+						type="text"
+						label="Descrição"
+						id="Description"
+						variant="outlined"
+						autoComplete="off"
 						value={formik.values.Description}
 						onChange={formik.handleChange}
 						error={formik.touched.Description && Boolean(formik.errors.Description)}
 					/>
-					<div className='box-button-inactivate'>
+					<div className="box-button-inactivate">
 						<BasicButtons
-							width='101px'
-							height='53px'
-							bordercolor='#ED5E5E'
-							backgroundcolor='#FFFFFF'
-							type='submit'
-							fontSize='0.9rem'
-							textcolor= '#ED5E5E'
+							width="101px"
+							height="53px"
+							bordercolor="#ED5E5E"
+							backgroundcolor="#FFFFFF"
+							type="submit"
+							fontSize="0.9rem"
+							textcolor="#ED5E5E"
 							onClick={() => handleChangeModal('main', 'inactive')}
 						>
-						Inativar
+							Inativar
 						</BasicButtons>
 					</div>
 				</form>

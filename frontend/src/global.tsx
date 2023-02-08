@@ -1,4 +1,4 @@
-import {ButtonProps} from '@mui/material/Button';
+import { ButtonProps } from '@mui/material/Button';
 
 export interface IUser {
 	name: string;
@@ -6,12 +6,12 @@ export interface IUser {
 }
 
 export interface IButtonsProps extends ButtonProps {
-    width: string;
-    height: string;
+	width: string;
+	height: string;
 	fontSize: string;
-    textcolor?: string;
-    bordercolor?: string;
-    backgroundcolor?: string;
+	textcolor?: string;
+	bordercolor?: string;
+	backgroundcolor?: string;
 	onClick?: () => void;
 }
 
@@ -22,8 +22,8 @@ export interface IrentHistory {
 	withdrawalDate: string;
 }
 
-export interface IrentHistoryAll extends IrentHistory{
-    title: string
+export interface IrentHistoryAll extends IrentHistory {
+	title: string;
 }
 
 export interface Ibooks {
@@ -55,6 +55,6 @@ export type MainModalProps = {
 		}>
 	>;
 	bookId: string;
-	handleClose?: ()=> void;
+	handleClose?: () => void;
 	handleChangeModal?: (closeModal: TModal, openModal: TModal) => void;
 };

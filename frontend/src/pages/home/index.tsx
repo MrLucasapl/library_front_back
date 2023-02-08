@@ -14,18 +14,8 @@ const Home = () => {
 				content="private"
 				description="A maior plataforma de eBooks universitários e de formação profissional do Brasil."
 			/>
-			<CardHome
-				to="/home/addbook"
-				value="Cadastrar novo livro"
-				img={ImgAdd}
-				alt="imagem adicionar livro"
-			/>
-			<CardHome
-				to="/home/biblioteca"
-				value="Biblioteca"
-				img={ImgBook}
-				alt="imagem biblioteca"
-			/>
+			<CardHome to="/home/addbook" value="Cadastrar novo livro" img={ImgAdd} alt="imagem adicionar livro" />
+			<CardHome to="/home/biblioteca" value="Biblioteca" img={ImgBook} alt="imagem biblioteca" />
 			<CardHome
 				to="/home/historico"
 				value="Histórico de empréstimos"

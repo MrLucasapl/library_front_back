@@ -15,12 +15,12 @@ const Api = axios.create({
 		},
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		...axios.defaults.transformRequest,
-	],
+		...axios.defaults.transformRequest
+	]
 });
 
 export const postUser = async (email: string, password: string) => {
-	const response = await Api.post('/',{'email':email, 'password':password});
+	const response = await Api.post('/', { email: email, password: password });
 	return Promise.resolve(response.data);
 };
 
@@ -34,15 +34,16 @@ export const getBookId = async (id: string) => {
 	return Promise.resolve(response.data);
 };
 
-export const putBookId = async (id: string, book: Ibooks ) => {
+export const putBookId = async (id: string, book: Ibooks) => {
 	const formData = new FormData();
 	formData.append('image', book.image);
 	formData.append('book', JSON.stringify(book));
-		
+
 	const response = await Api.put('/books/' + id, formData, {
 		headers: {
 			'Content-Type': 'multipart/form-data'
-		}});
+		}
+	});
 	return Promise.resolve(response.data);
 };
 
@@ -53,6 +54,7 @@ export const postBook = async (Newbook: Ibooks) => {
 	const response = await Api.post('/books', formData, {
 		headers: {
 			'Content-Type': 'multipart/form-data'
-		}});
+		}
+	});
 	return Promise.resolve(response);
 };

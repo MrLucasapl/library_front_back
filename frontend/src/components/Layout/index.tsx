@@ -5,10 +5,9 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { PagesStyle } from './style';
 
 const Layout = () => {
-	
 	const navigate = useNavigate();
 	const user: IUser = JSON.parse(localStorage.getItem('user'));
-	
+
 	React.useEffect(() => {
 		if (!user) {
 			return navigate('/');
@@ -18,9 +17,7 @@ const Layout = () => {
 	return (
 		<PagesStyle>
 			<Header name={user?.name} />
-			<div id='layout'>
-				{user? <Outlet /> : null}
-			</div>
+			<div id="layout">{user ? <Outlet /> : null}</div>
 		</PagesStyle>
 	);
 };

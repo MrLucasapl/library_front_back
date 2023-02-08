@@ -5,7 +5,7 @@ export const convertDate = (data: string) => {
 	return new Date(newDate).toLocaleDateString('pt-BR');
 };
 
-export const checkBorrowedBook = (loans: IrentHistory[])=>{
+export const checkBorrowedBook = (loans: IrentHistory[]) => {
 	const currentDate = new Date();
 	const date = loans.filter((loan: IrentHistory) => {
 		const deliveryDate = new Date(loan.deliveryDate);

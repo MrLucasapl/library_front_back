@@ -8,13 +8,14 @@ interface MessageModal {
 	severity: AlertColor;
 }
 
-export const useMessage = ()=>{
-	const [ message, setMessage ] = React.useState<MessageModal>({content: '', display: false, severity: 'success'});
+export const useMessage = () => {
+	const [message, setMessage] = React.useState<MessageModal>({ content: '', display: false, severity: 'success' });
 
 	message.display &&
-    setTimeout(() => {setMessage({ content: '', display: false, severity: 'success' });
-    }, 3000);
-	
+		setTimeout(() => {
+			setMessage({ content: '', display: false, severity: 'success' });
+		}, 3000);
+
 	const AlertMessage = () => {
 		return (
 			<Snackbar open={message.display}>
@@ -26,7 +27,7 @@ export const useMessage = ()=>{
 	};
 
 	return {
-		message, 
+		message,
 		setMessage,
 		AlertMessage
 	};

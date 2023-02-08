@@ -18,7 +18,7 @@ const style = {
 	bgcolor: '#FFFFFF',
 	border: '1px solid #707070',
 	boxSizing: 'border-box',
-	boxShadow: 24,
+	boxShadow: 24
 };
 
 const Modal = () => {
@@ -26,17 +26,14 @@ const Modal = () => {
 		main: true,
 		lent: false,
 		rentHistory: false,
-		inactive: false,
+		inactive: false
 	};
 	const [modal, setModal] = React.useState(standardModal);
 	const [open, setOpen] = React.useState(false);
 	const [bookId, setBookId] = React.useState('');
 
-	const handleChangeModal = (
-		closeModal: keyof typeof modal,
-		openModal: keyof typeof modal
-	) => {
-		setModal((modal) => ({ ...modal, [closeModal]: false, [openModal]: true }));
+	const handleChangeModal = (closeModal: keyof typeof modal, openModal: keyof typeof modal) => {
+		setModal(modal => ({ ...modal, [closeModal]: false, [openModal]: true }));
 	};
 
 	const handleClickModal = (bookId: string) => {
@@ -45,41 +42,22 @@ const Modal = () => {
 	};
 
 	const handleOpen: () => void = () => setOpen(true);
-	const handleClose: () => void = () => {setOpen(false); setModal(standardModal);};
+	const handleClose: () => void = () => {
+		setOpen(false);
+		setModal(standardModal);
+	};
 
-	const showModal = ()=>{
+	const showModal = () => {
 		return (
-			<Dialog 
-				open={open}
-				onClose={handleClose}
-			>
+			<Dialog open={open} onClose={handleClose}>
 				<StyledModal sx={style}>
 					<>
 						{modal.main && (
-							<MainModal
-								bookId={bookId}
-								handleClose={handleClose}
-								handleChangeModal={handleChangeModal}
-							/>
+							<MainModal bookId={bookId} handleClose={handleClose} handleChangeModal={handleChangeModal} />
 						)}
-						{modal.lent && (
-							<LendBookModal
-								bookId={bookId}
-								handleChangeModal={handleChangeModal}
-							/>
-						)}
-						{modal.inactive && (
-							<InactivateBookModal
-								bookId={bookId}
-								handleChangeModal={handleChangeModal}
-							/>
-						)}
-						{modal.rentHistory && (
-							<RentHistoryBookModal
-								bookId={bookId}
-								handleChangeModal={handleChangeModal}
-							/>
-						)}
+						{modal.lent && <LendBookModal bookId={bookId} handleChangeModal={handleChangeModal} />}
+						{modal.inactive && <InactivateBookModal bookId={bookId} handleChangeModal={handleChangeModal} />}
+						{modal.rentHistory && <RentHistoryBookModal bookId={bookId} handleChangeModal={handleChangeModal} />}
 					</>
 				</StyledModal>
 			</Dialog>
@@ -90,7 +68,7 @@ const Modal = () => {
 		handleOpen,
 		handleClose,
 		showModal,
-		handleClickModal,
+		handleClickModal
 	};
 };
 

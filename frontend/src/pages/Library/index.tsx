@@ -5,7 +5,7 @@ import Head from 'components/head';
 import { Ibooks } from 'global';
 import SearchIcon from '@mui/icons-material/Search';
 import { getAllBooks } from 'services/api';
-import { LibraryStyles, TextFieldMui } from './style';  
+import { LibraryStyles, TextFieldMui } from './style';
 import BasicButtons from 'components/button';
 import { InputLabel, Select, MenuItem, FormControl } from '@mui/material';
 import { filterBooks } from 'util/filterBooks';
@@ -18,42 +18,45 @@ type TInputField = {
 	value: string;
 };
 
-const inputField: TInputField[]  = [
+const inputField: TInputField[] = [
 	{
 		name: 'search',
-		value: '',
+		value: ''
 	},
 	{
 		name: 'filter',
-		value: '',
-	},
+		value: ''
+	}
 ];
 
 const Library = () => {
-	const {id} = useParams();
+	const { id } = useParams();
 	const { setMessage, AlertMessage } = useMessage();
 
-	const { showModal, handleClickModal} = Modal();
+	const { showModal, handleClickModal } = Modal();
 
-	const [books, setBooks] = React.useState<Ibooks[]| []>([]);
+	const [books, setBooks] = React.useState<Ibooks[] | []>([]);
 	const [copyBooks, setCopyBooks] = React.useState<Ibooks[] | []>([]);
 	const [formSave, setformSave] = React.useState(
-		inputField.reduce((acc, field) => {
-			return { ...acc, [field.name]: '' };
-		}, {search: '', filter: '',})
+		inputField.reduce(
+			(acc, field) => {
+				return { ...acc, [field.name]: '' };
+			},
+			{ search: '', filter: '' }
+		)
 	);
-	
+
 	React.useEffect(() => {
 		getAllBooks()
-			.then((res) => {
+			.then(res => {
 				setBooks(res);
 				setCopyBooks(res);
 			})
-			.catch((error) => {
+			.catch(error => {
 				setMessage({
-					content: (error.response?.data)? error.response.data : error.message,
+					content: error.response?.data ? error.response.data : error.message,
 					display: true,
-					severity: 'error',
+					severity: 'error'
 				});
 			});
 	}, []);
@@ -64,11 +67,11 @@ const Library = () => {
 		}
 	}, []);
 
-	const handleChange = ({target}: React.ChangeEvent<HTMLInputElement>) => {
+	const handleChange = ({ target }: React.ChangeEvent<HTMLInputElement>) => {
 		setformSave({ ...formSave, [target.name]: target.value });
 	};
 
-	const handleSubmit = (event: React.FormEvent) => {		
+	const handleSubmit = (event: React.FormEvent) => {
 		event.preventDefault();
 		filterBooks(formSave.search, formSave.filter, books, setCopyBooks);
 	};
@@ -81,35 +84,32 @@ const Library = () => {
 				content="private"
 				description="A página mostra todoa os livros que o usuário pode alugar."
 			/>
-			<ComeBack
-				to="/home"
-				value="Biblioteca"
-			/>
+			<ComeBack to="/home" value="Biblioteca" />
 			<form className="box-component" onSubmit={handleSubmit}>
-				<div className='box-search'>
+				<div className="box-search">
 					<TextFieldMui
-						InputProps={{startAdornment: (<SearchIcon sx={{color: '#ADB5BD', marginRight: '5px'}}/>)}}
-						label=''
-						name='search'
-						placeholder='Pesquisar livro...'
-						variant='outlined'
-						autoComplete='off'
+						InputProps={{ startAdornment: <SearchIcon sx={{ color: '#ADB5BD', marginRight: '5px' }} /> }}
+						label=""
+						name="search"
+						placeholder="Pesquisar livro..."
+						variant="outlined"
+						autoComplete="off"
 						value={formSave.search}
 						onChange={handleChange}
 					/>
 					<BasicButtons
-						width='82px'
-						height='37px'
-						fontSize='0.8rem'
-						bordercolor='#FFC501'
-						backgroundcolor='#FFC501'
-						textcolor='black'
-						type='submit'
+						width="82px"
+						height="37px"
+						fontSize="0.8rem"
+						bordercolor="#FFC501"
+						backgroundcolor="#FFC501"
+						textcolor="black"
+						type="submit"
 					>
 						Buscar
 					</BasicButtons>
 				</div>
-				<FormControl id="filter" focused={false} sx={{ m: 1, minWidth: 170}}>
+				<FormControl id="filter" focused={false} sx={{ m: 1, minWidth: 170 }}>
 					<InputLabel>Filtrar</InputLabel>
 					<Select
 						labelId="demo-simple-select-helper-label"
@@ -121,18 +121,15 @@ const Library = () => {
 						<MenuItem value="">
 							<em>Selecione</em>
 						</MenuItem>
-						<MenuItem value='genre'>Gênero</MenuItem>
-						<MenuItem value='author'>Autor</MenuItem>
-						<MenuItem value='systemEntryDate'>Data de entrada</MenuItem>
+						<MenuItem value="genre">Gênero</MenuItem>
+						<MenuItem value="author">Autor</MenuItem>
+						<MenuItem value="systemEntryDate">Data de entrada</MenuItem>
 					</Select>
 				</FormControl>
 			</form>
 
 			<div id="box-books">
-				<CardBook
-					value={copyBooks}
-					handleClickModal={handleClickModal}
-				/>
+				<CardBook value={copyBooks} handleClickModal={handleClickModal} />
 			</div>
 			{showModal()}
 		</LibraryStyles>

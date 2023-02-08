@@ -1,4 +1,4 @@
-import { string, object, date,  } from 'yup';
+import { string, object, date } from 'yup';
 
 export const validationSchema = object().shape({
 	title: string().required(),
@@ -6,5 +6,5 @@ export const validationSchema = object().shape({
 	author: string().required(),
 	synopsis: string().required(),
 	systemEntryDate: date().required(),
-	image: string().required(),
+	image: string().required()
 });
