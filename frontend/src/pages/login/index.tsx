@@ -1,12 +1,12 @@
 import React from 'react';
 import Logo from 'assets/Logo.png';
-import BasicButtons from 'components/button';
+import BasicButtons from '../../components/button';
 import { useNavigate } from 'react-router-dom';
 import { BackgroundImg, BackgroundFilter, TextFieldMui } from './style';
 import { useFormik } from 'formik';
 import { initialValues, validationSchema } from './validation';
-import { postUser } from 'services/api';
-import { useMessage } from 'hooks/AlertMessage';
+import { postUser } from '../../services/api';
+import { useMessage } from '../../hooks/AlertMessage';
 
 const Login = () => {
 	const navigate = useNavigate();
@@ -45,10 +45,11 @@ const Login = () => {
 		<BackgroundImg data-testid="login">
 			<BackgroundFilter>
 				{AlertMessage()}
-				<form onSubmit={formik.handleSubmit}>
+				<form name='submit-form' onSubmit={formik.handleSubmit}>
 					<img id="logo" src={Logo} alt="imagem logo" />
 					<section>
 						<TextFieldMui
+							data-testid="email"
 							type="email"
 							label=""
 							id="email"
@@ -60,6 +61,7 @@ const Login = () => {
 							error={formik.touched.email && Boolean(formik.errors.email)}
 						/>
 						<TextFieldMui
+							data-testid="password"
 							type="password"
 							label=""
 							id="password"

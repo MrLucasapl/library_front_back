@@ -1,10 +1,11 @@
 import React from 'react';
 import { IButtonsProps } from 'global';
-import { StyledButton } from './style.js';
+import { StyledButton } from './style';
 
 const BasicButtons = (format: IButtonsProps) => {
 	return (
 		<StyledButton
+			data-testid='button'
 			className={format.className}
 			width={format.width}
 			height={format.height}

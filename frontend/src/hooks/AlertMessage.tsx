@@ -1,5 +1,5 @@
 import { Alert, AlertColor } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar/Snackbar';
+import Snackbar from '@mui/material/Snackbar';
 import React from 'react';
 
 interface MessageModal {
