@@ -1,13 +1,13 @@
 import React from 'react';
-import { Ibooks, IrentHistory } from 'global';
-import { getAllBooks } from 'services/api';
+import { Ibooks, IrentHistory } from '../../global';
+import { getAllBooks } from '../../services/api';
 import { StyleRentHistory } from './style';
-import { convertDate } from 'util/convertDate';
-import ImgFilter from 'assets/tabela-filtro.png';
-import { useOrdering } from 'hooks/ordering';
-import ComeBack from 'components/comeBack';
-import Head from 'components/head';
-import { useMessage } from 'hooks/AlertMessage';
+import { convertDate } from '../../util/convertDate';
+import ImgFilter from '../../assets/tabela-filtro.png';
+import { useOrdering } from '../../hooks/ordering';
+import ComeBack from '../../components/comeBack';
+import Head from '../../components/head';
+import { useMessage } from '../../hooks/AlertMessage';
 
 interface IRowfilter {
 	id: string;

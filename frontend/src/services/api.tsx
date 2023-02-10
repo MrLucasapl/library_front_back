@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Ibooks, IUser } from 'global';
+import { Ibooks, IUser } from '../global';
 
 const url = 'http://localhost:4002/';
 

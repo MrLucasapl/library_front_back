@@ -1,5 +1,5 @@
 import React from 'react';
-import Logo from 'assets/Logo.png';
+import Logo from '../../assets/Logo.png';
 import BasicButtons from '../../components/button';
 import { useNavigate } from 'react-router-dom';
 import { BackgroundImg, BackgroundFilter, TextFieldMui } from './style';
@@ -16,7 +16,7 @@ const Login = () => {
 	const formik = useFormik({
 		initialValues,
 		validationSchema,
-		onSubmit: (values: { email: string; password: string; }) => {
+		onSubmit: (values: { email: string; password: string }) => {
 			postUser(values.email, values.password)
 				.then(res => {
 					const { name, token, auth } = res;
@@ -45,7 +45,7 @@ const Login = () => {
 		<BackgroundImg data-testid="login">
 			<BackgroundFilter>
 				{AlertMessage()}
-				<form name='submit-form' onSubmit={formik.handleSubmit}>
+				<form name="submit-form" onSubmit={formik.handleSubmit}>
 					<img id="logo" src={Logo} alt="imagem logo" />
 					<section>
 						<TextFieldMui

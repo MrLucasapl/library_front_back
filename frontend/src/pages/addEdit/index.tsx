@@ -1,17 +1,17 @@
 import React from 'react';
 import { InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
-import BasicButtons from 'components/button';
-import ComeBack from 'components/comeBack';
-import Head from 'components/head';
-import { Ibooks } from 'global';
+import BasicButtons from '../../components/button';
+import ComeBack from '../../components/comeBack';
+import Head from '../../components/head';
+import { Ibooks } from '../../global';
 import { AddEditStyle, FormControlMui, InputFileStyled, TextFieldMui } from './style';
-import { getBookId, postBook, putBookId } from 'services/api';
+import { getBookId, postBook, putBookId } from '../../services/api';
 import { useParams, useNavigate } from 'react-router-dom';
 import { validationSchema } from './validation';
 import { useFormik } from 'formik';
-import { convertDate } from 'util/convertDate';
-import { convertBase64 } from 'util/convertBase64';
-import { useMessage } from 'hooks/AlertMessage';
+import { convertDate } from '../../util/convertDate';
+import { convertBase64 } from '../../util/convertBase64';
+import { useMessage } from '../../hooks/AlertMessage';
 
 const structureBook: Ibooks = {
 	id: '',

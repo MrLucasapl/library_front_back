@@ -1,11 +1,11 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import Layout from 'components/Layout';
-import Home from 'pages/home';
-import Library from 'pages/Library';
-import AddEdit from 'pages/addEdit';
-import RentHistoryBook from 'pages/loan';
-import Login from 'pages/login';
+import Layout from '../components/Layout';
+import AddEdit from '../pages/addEdit';
+import Home from '../pages/home';
+import Library from '../pages/Library';
+import RentHistoryBook from '../pages/loan';
+import Login from '../pages/login';
 
 const Dors = () => {
 	return (

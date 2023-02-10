@@ -7,7 +7,7 @@ import { TextFieldMui, StyleLend } from '../style';
 import { initialValuesLend, validationSchemaLend } from '../validation';
 import { useFormik } from 'formik';
 import CloseModal from '../closeModal';
-import { useMessage } from 'hooks/AlertMessage';
+import { useMessage } from '../../../hooks/AlertMessage';
 
 const LendBookModal = ({ bookId, handleChangeModal }: MainModalProps) => {
 	const [book, setBook] = React.useState<Ibooks>();

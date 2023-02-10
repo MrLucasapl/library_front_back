@@ -6,7 +6,7 @@ import { convertDate } from '../../../util/convertDate';
 import ImgFilter from '../../../assets/tabela-filtro.png';
 import { useOrdering } from '../../../hooks/ordering';
 import CloseModal from '../closeModal';
-import { useMessage } from 'hooks/AlertMessage';
+import { useMessage } from '../../../hooks/AlertMessage';
 
 interface IRowfilter {
 	id: string;

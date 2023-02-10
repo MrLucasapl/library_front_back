@@ -1,5 +1,5 @@
-import Header from 'components/header';
-import { IUser } from 'global';
+import Header from '../header';
+import { IUser } from '../../global';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { PagesStyle } from './style';

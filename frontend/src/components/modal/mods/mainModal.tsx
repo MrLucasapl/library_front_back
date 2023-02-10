@@ -7,7 +7,7 @@ import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import { useNavigate } from 'react-router-dom';
 import { checkBorrowedBook } from '../../../util/convertDate';
 import CloseModal from '../closeModal';
-import { useMessage } from 'hooks/AlertMessage';
+import { useMessage } from '../../../hooks/AlertMessage';
 
 const MainModal = ({ bookId, handleChangeModal, handleClose }: MainModalProps) => {
 	const { setMessage, AlertMessage } = useMessage();
