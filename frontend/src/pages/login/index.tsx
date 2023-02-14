@@ -45,7 +45,7 @@ const Login = () => {
 		<BackgroundImg data-testid="login">
 			<BackgroundFilter>
 				{AlertMessage()}
-				<form name="submit-form" onSubmit={formik.handleSubmit}>
+				<form data-testid="submit-form" onSubmit={formik.handleSubmit}>
 					<img id="logo" src={Logo} alt="imagem logo" />
 					<section>
 						<TextFieldMui

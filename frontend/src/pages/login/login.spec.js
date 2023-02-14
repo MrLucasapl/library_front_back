@@ -1,26 +1,28 @@
 import React from 'react';
 import Login from './index';
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { postUser } from '../../services/api';
 
 const mockedUsedNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
+	...jest.requireActual('react-router-dom'),
 	useNavigate: () => mockedUsedNavigate
 }));
 
+jest.mock('../../services/api', () => ({
+	postUser: jest.fn().mockResolvedValue({ auth: true, name: 'John Doe', token: 'abc123' })
+}));
 
-jest.mock('formik', () => {
+/* jest.mock('formik', () => {
   return {
     useFormik: jest.fn().mockReturnValue({
       values: {
         email: 'admin@admin.com.br',
         password: 'Admin7242',
       },
-      handleSubmit: jest.fn(),
     })
   };
-});
+}); */
 
 describe('Integrating unit tests into the login page', () => {
 	it('should render Login component', () => {
@@ -28,20 +30,19 @@ describe('Integrating unit tests into the login page', () => {
 		expect(screen.getByTestId('login')).toBeInTheDocument();
 	});
 
-  fit('testing if formik is being called', async () => {
-    render(<Login onSubmit={handleSubmit} />);
+	fit('testing if formik is being called', async () => {
+		render(<Login />);
+		const email = screen.getByTestId(/email/i).querySelector('input');
+		const password = screen.getByTestId(/password/i).querySelector('input');
+		const submitButton = screen.getByTestId('submit-form');
 
-    await userEvent.type(screen.getByTestId(/email/i).querySelector('input'), 'admin@admin.com.br');
-    await userEvent.type(screen.getByTestId(/password/i).querySelector('input'), 'Admin7242');
-    await userEvent.click(screen.getByRole('button', {type: /submit/i}));
+		await fireEvent.change(email, { target: { value: 'admin@admin.com.br' } });
+		await fireEvent.change(password, { target: { value: 'Admin7242' } });
+		fireEvent.submit(submitButton);
 
-    await waitFor(()=> expect(handleSubmit()).toHaveBeenCalledTimes(1))
-    await waitFor(() =>
-      expect(handleSubmit()).toHaveBeenCalledWith({
-        email: 'admin@admin.com.br',
-        password: 'Admin7242',
-      }),
-    )
-
-  })
+		await waitFor(() => expect(postUser).toHaveBeenCalledTimes(1));
+		await waitFor(() =>
+			expect(postUser).toHaveBeenCalledWith('admin@admin.com.br', 'Admin7242')
+		);
+	});
 });

@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "jest --watchAll",
+    "test": "jest --watchAll --coverage",
     "build": "vite build"
   },
   "dependencies": {
