@@ -11,7 +11,7 @@ import { useMessage } from '../../hooks/AlertMessage';
 const Login = () => {
 	const navigate = useNavigate();
 	localStorage.removeItem('user');
-	const { setMessage, AlertMessage } = useMessage();
+	const { showMessage, AlertMessage } = useMessage();
 
 	const formik = useFormik({
 		initialValues,
@@ -32,11 +32,7 @@ const Login = () => {
 					}
 				})
 				.catch(error => {
-					setMessage({
-						content: error.response?.data ? error.response.data : error.message,
-						display: true,
-						severity: 'error'
-					});
+					showMessage(error.response?.data ? error.response.data : error.message, { timeout: 5000 });
 				});
 		}
 	});
@@ -44,7 +40,7 @@ const Login = () => {
 	return (
 		<BackgroundImg data-testid="login">
 			<BackgroundFilter>
-				{AlertMessage()}
+				<AlertMessage />
 				<form data-testid="submit-form" onSubmit={formik.handleSubmit}>
 					<img id="logo" src={Logo} alt="imagem logo" />
 					<section>

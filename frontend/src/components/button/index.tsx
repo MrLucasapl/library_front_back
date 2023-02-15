@@ -5,7 +5,6 @@ import { StyledButton } from './style';
 const BasicButtons = (format: IButtonsProps) => {
 	return (
 		<StyledButton
-			data-testid="button"
 			className={format.className}
 			width={format.width}
 			height={format.height}
