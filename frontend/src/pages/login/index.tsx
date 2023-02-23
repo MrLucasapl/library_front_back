@@ -32,7 +32,7 @@ const Login = () => {
 					}
 				})
 				.catch(error => {
-					showMessage(error.response?.data ? error.response.data : error.message, { timeout: 5000 });
+					showMessage(error.response?.data ? error.response.data.message : error.message, 'error', { timeout: 5000 });
 				});
 		}
 	});

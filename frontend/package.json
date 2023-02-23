@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "test": "jest --watchAll --coverage",
+    "test": "jest --watchAll --coverage --detectOpenHandles",
     "build": "vite build"
   },
   "dependencies": {
